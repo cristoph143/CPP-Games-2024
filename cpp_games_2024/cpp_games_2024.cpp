@@ -2,10 +2,26 @@
 //
 
 #include <iostream>
+#include "cpp_games_2024.h"
+#include "CommonTool.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    // Define the menu options with their descriptions and associated actions
+    map<int, MenuOption> menuOptions = {
+        {1, {"Hello World", hello_world}},
+        {0, {"Exit", exitApp}}
+    };
+    // Run the dynamic menu
+    // Pass the exit option number to runMenu
+    runMenu(menuOptions, 0); // 0 is the exit option number
+
+    return 0;
+}
+
+void hello_world()
+{
+    PRINT_MESSAGE("Hello, World!");
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
@@ -18,3 +34,5 @@ int main()
 //   4. Use the Error List window to view errors
 //   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
 //   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+
+
