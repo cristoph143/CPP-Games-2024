@@ -18,5 +18,16 @@
     <ClCompile Include="cpp_games_2024.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CommonTool.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CommonTool.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="cpp_games_2024.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
