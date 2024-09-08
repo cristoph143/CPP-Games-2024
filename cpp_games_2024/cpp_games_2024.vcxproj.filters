@@ -24,9 +24,15 @@
     <ClCompile Include="CommonTool.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sudoku_client.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cpp_games_2024.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sudoku_client.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

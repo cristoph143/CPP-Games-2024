@@ -6,19 +6,23 @@
 #include <string>
 #include <sstream>
 #include <cstdlib>
+#include <functional>
 
 using namespace std;
 
 #define PRINT_MESSAGE(format, ...) printf(format "\n", ##__VA_ARGS__)
 #define PRINT_ERROR_MESSAGE(format, ...) \
-    std::cerr << "Error: " << format << std::endl, __VA_ARGS__
-// Function pointer typedefs for dynamic functions
-typedef void (*MenuAction)();
+    cerr << "Error: " << format << endl, __VA_ARGS__
+
+// Template for function pointer
+template<typename Ret = void, typename... Args>
+using MenuAction = function<Ret(Args...)>;
 
 // Struct to hold menu option description and associated action
+template<typename Ret = void, typename... Args>
 struct MenuOption {
     string description;
-    MenuAction action;
+    MenuAction<Ret, Args...> action;
 };
 
 template<typename T>
@@ -33,11 +37,11 @@ T loadFunction(HMODULE hLib, const char* functionName) {
 
 
 //void runMenu(const map<int, MenuOption>& menuOptions);
-void runMenu(const map<int, MenuOption>& menuOptions, int exitOption);
+void runMenu(const map<int, MenuOption<>>& menuOptions, int exitOption);
 
 void exitApp();
 
-HMODULE loadDLL(const std::wstring& dllPath);
+HMODULE loadDLL(const wstring& dllPath);
 
 // Function to unload the DLL
 void unloadDLL(HMODULE hLib);

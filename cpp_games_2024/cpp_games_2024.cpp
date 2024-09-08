@@ -5,11 +5,12 @@
 #include "cpp_games_2024.h"
 #include "CommonTool.h"
 #include "sudoku_client.h"
+#include <map>
 
 int main()
 {
     // Define the menu options with their descriptions and associated actions
-    map<int, MenuOption> menuOptions = {
+    map<int, MenuOption<void>> menuOptions = {
         {1, {"Sudoku", run_sudoku_menu}},
         {2, {"Hello World", hello_world}},
         {0, {"Exit", exitApp}}
@@ -27,7 +28,27 @@ void hello_world()
 }
 
 void run_sudoku_menu() {
-    runSudokuGame();
+    SudokuClient sudokuClient;
+
+    if (sudokuClient.loadLibrary()) {
+        Grid grid;
+
+        // Generate a new Sudoku puzzle
+        sudokuClient.generatePuzzle(grid);
+
+        // Remove numbers to create blanks
+        sudokuClient.makePuzzle(grid, 20);
+
+        // Check if a move is valid
+        if (sudokuClient.checkMove(grid, 0, 0, 5)) {
+            PRINT_MESSAGE("Move is valid.");
+        }
+        else {
+            PRINT_MESSAGE("Move is invalid.");
+        }
+
+        sudokuClient.unloadLibrary();
+    }
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -18,11 +18,11 @@ void unloadDLL(HMODULE hLib) {
 
 
 // Function to display menu and handle user choices
-void runMenu(const std::map<int, MenuOption>& menuOptions, int exitOption) {
+void runMenu(const std::map<int, MenuOption<>>& menuOptions, int exitOption) {
     int choice = 0;
     do {
         // Display menu
-        PRINT_MESSAGE("\nSelect an option:");
+        cout << "\nSelect an option:" << endl;
         for (const auto& option : menuOptions) {
             PRINT_MESSAGE("%d. %s", option.first, option.second.description.c_str());
         }
@@ -30,8 +30,9 @@ void runMenu(const std::map<int, MenuOption>& menuOptions, int exitOption) {
         scanf_s("%d", &choice);  // Use scanf for input
 
         // Execute corresponding action if valid
-        if (menuOptions.count(choice)) {
-            menuOptions.at(choice).action();
+        auto it = menuOptions.find(choice);
+        if (it != menuOptions.end()) {
+            it->second.action();  // Call the corresponding function
         }
         else {
             PRINT_MESSAGE("Invalid choice. Please try again.");
@@ -39,6 +40,7 @@ void runMenu(const std::map<int, MenuOption>& menuOptions, int exitOption) {
 
     } while (choice != exitOption); // Use dynamic exit option
 }
+
 
 // Exit application
 void exitApp() {

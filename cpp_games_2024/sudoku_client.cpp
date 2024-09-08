@@ -1,66 +1,78 @@
 #include "sudoku_client.h"
 #include "CommonTool.h"
 
-int runSudokuGame()
-{
-    std::wstring dllPath = L"sudokulibrary.dll";  // Path to your DLL
-    HMODULE hInstLibrary = loadDLL(dllPath);
+// Constructor: Initialize library handle to null
+SudokuClient::SudokuClient() : hInstLibrary(nullptr),
+createLibraryInstance(nullptr),
+destroyLibraryInstance(nullptr),
+generateSudoku(nullptr),
+isValidMove(nullptr),
+removeNumbers(nullptr) {}
+
+// Destructor: Unload the library if it's loaded
+SudokuClient::~SudokuClient() {
+    unloadLibrary();
+}
+
+// Function to load the DLL and retrieve the necessary function pointers
+bool SudokuClient::loadLibrary() {
+    // Load the Sudoku library DLL
+    hInstLibrary = LoadLibrary(L"sudokulibrary.dll");
     if (!hInstLibrary) {
-        return 1;  // Exit if DLL fails to load
+        std::cerr << "Failed to load Sudoku DLL." << std::endl;
+        return false;
     }
 
-    // Load functions
-    auto createLibraryInstance = loadFunction<Csudokulibrary * (*)()>(hInstLibrary, "CreateLibraryInstance");
-    auto destroyLibraryInstance = loadFunction<void(*)(Csudokulibrary*)>(hInstLibrary, "DestroyLibraryInstance");
-    auto generateSudoku = loadFunction<GenerateSudokuFunc>(hInstLibrary, "generateSudoku");
-    auto isValidMove = loadFunction<IsValidMoveFunc>(hInstLibrary, "isValidMove");
-    auto removeNumbers = loadFunction<RemoveNumbersFunc>(hInstLibrary, "removeNumbers");
+    // Load the required functions
+    createLibraryInstance = (CreateLibraryInstanceFunc)GetProcAddress(hInstLibrary, "CreateLibraryInstance");
+    destroyLibraryInstance = (DestroyLibraryInstanceFunc)GetProcAddress(hInstLibrary, "DestroyLibraryInstance");
+    generateSudoku = (GenerateSudokuFunc)GetProcAddress(hInstLibrary, "generateSudoku");
+    isValidMove = (IsValidMoveFunc)GetProcAddress(hInstLibrary, "isValidMove");
+    removeNumbers = (RemoveNumbersFunc)GetProcAddress(hInstLibrary, "removeNumbers");
 
-
-
-    if (!createLibraryInstance || !generateSudoku || !isValidMove || !removeNumbers) {
-        std::cerr << "Failed to load necessary functions from the DLL" << std::endl;
-        unloadDLL(hInstLibrary);
-        return 1;
+    // Check if all functions are loaded successfully
+    if (!createLibraryInstance || !destroyLibraryInstance || !generateSudoku || !isValidMove || !removeNumbers) {
+        std::cerr << "Failed to load necessary functions from the Sudoku DLL." << std::endl;
+        unloadLibrary();
+        return false;
     }
 
-    // Create the library instance
-    Csudokulibrary* library = createLibraryInstance();
-    if (!library) {
-        std::cerr << "Failed to create library instance" << std::endl;
-        unloadDLL(hInstLibrary);
-        return 1;
-    }
+    return true;
+}
 
-    // Create the grid
-    Grid grid = { 0 };
-
-    // Generate Sudoku
-    library->generateSudoku(grid);
-
-    // Remove some numbers to create the puzzle
-    library->removeNumbers(grid, 40);
-
-    // Display the generated grid
-    for (int i = 0; i < 9; i++) {
-        for (int j = 0; j < 9; j++) {
-            std::cout << (grid[i][j] ? grid[i][j] : '.') << " ";
+// Function to unload the DLL and reset function pointers
+void SudokuClient::unloadLibrary() {
+    if (hInstLibrary) {
+        // Destroy the library instance (if necessary)
+        if (destroyLibraryInstance) {
+            void* instance = createLibraryInstance();
+            destroyLibraryInstance(instance);
         }
-        std::cout << std::endl;
-    }
 
-    // Example: Checking if a move is valid
-    int row = 0, col = 0, num = 5;
-    if (library->isValidMove(grid, row, col, num)) {
-        std::cout << "Valid move!" << std::endl;
+        // Free the library
+        FreeLibrary(hInstLibrary);
+        hInstLibrary = nullptr;
     }
-    else {
-        std::cout << "Invalid move." << std::endl;
+}
+
+// Wrapper to generate a Sudoku puzzle
+void SudokuClient::generatePuzzle(Grid grid) {
+    if (generateSudoku) {
+        generateSudoku(grid);
     }
+}
 
-    // Clean up
-    delete library;
-    unloadDLL(hInstLibrary);
+// Wrapper to check if a move is valid
+bool SudokuClient::checkMove(Grid grid, int row, int col, int num) {
+    if (isValidMove) {
+        return isValidMove(grid, row, col, num);
+    }
+    return false;
+}
 
-    return 0;
+// Wrapper to remove numbers from the Sudoku grid to create a puzzle
+void SudokuClient::makePuzzle(Grid grid, int blanks) {
+    if (removeNumbers) {
+        removeNumbers(grid, blanks);
+    }
 }
