@@ -10,6 +10,7 @@
 
 using namespace std;
 
+#define DELAY(milliseconds) std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds))
 #define PRINT_MESSAGE(format, ...) printf(format "\n", ##__VA_ARGS__)
 #define PRINT_ERROR_MESSAGE(format, ...) \
     cerr << "Error: " << format << endl, __VA_ARGS__
@@ -24,8 +25,6 @@ struct MenuOption {
     string description;
     MenuAction<Ret, Args...> action;
 };
-
-
 
 template<typename T>
 T loadFunction(HMODULE hLib, const char* functionName) {
@@ -47,3 +46,5 @@ HMODULE loadDLL(const wstring& dllPath);
 
 // Function to unload the DLL
 void unloadDLL(HMODULE hLib);
+
+void clearScreen();

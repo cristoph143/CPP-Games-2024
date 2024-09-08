@@ -52,6 +52,7 @@ public:
 
     void setSudokuType(const string& type);
     void setDifficulty(const string& difficulty);
+    void setTimer(bool enable);
 
     bool loadLibrary();
     void unloadLibrary();

@@ -1,6 +1,8 @@
 #include "sudoku_client.h"
 #include "CommonTool.h"
 
+#include <chrono>   // For std::chrono
+#include <thread>   // For std::this_thread::sleep_for
 // Constructor: Initialize library handle to null
 SudokuClient::SudokuClient() : hInstLibrary(nullptr),
 createLibraryInstance(nullptr),
@@ -61,32 +63,51 @@ map<int, MenuOption<>> difficultyMenuOptions = {
 };
 // Define the menu options for timer settings with lambda functions
 map<int, MenuOption<>> timerMenuOptions = {
-    {1, {"Enable Timer", [&]() { 
-        sudokuClient.enable_timer(); 
-        PRINT_MESSAGE("Timer Enabled"); 
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
+    {1, {"Enable Timer", [&]() {
+        sudokuClient.setTimer(true);  // Call setTimer to enable the timer
     }}},
-    {2, {"Disable Timer", [&]() { 
-        sudokuClient.disable_timer(); 
-        PRINT_MESSAGE("Timer Disabled"); 
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
+    {2, {"Disable Timer", [&]() {
+        sudokuClient.setTimer(false);  // Call setTimer to disable the timer
     }}},
-    {0, {"Back to Sudoku Type Menu", [&]() { 
-        runMenu(sudokuTypeMenuOptions, 0); 
+    {0, {"Back to Settings Menu", [&]() {
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        clearScreen();
+        runMenu(settingsMenuOptions, 0); // Return to settings menu
     }}}
 };
-
 // Helper function for setting Sudoku type
 void SudokuClient::setSudokuType(const string& type) {
     settings.sudokuType = type;
     PRINT_MESSAGE("Set Sudoku Type to %s", type.c_str());
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    clearScreen();
     runMenu(settingsMenuOptions, 0);  // Return to settings menu
 }
 
+
+// Helper function for setting the timer
+void SudokuClient::setTimer(bool enable) {
+    settings.timerEnabled = enable;  // Update the timerEnabled status
+
+    if (enable) {
+        enable_timer();
+        PRINT_MESSAGE("Timer Enabled");
+    }
+    else {
+        disable_timer();
+        PRINT_MESSAGE("Timer Disabled");
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    clearScreen(); // Clear the screen
+    runMenu(settingsMenuOptions, 0);  // Return to settings menu
+}
 // Helper function for setting difficulty
 void SudokuClient::setDifficulty(const string& difficulty) {
     settings.difficulty = difficulty;
     PRINT_MESSAGE("Difficulty set to %s", difficulty.c_str());
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    clearScreen();
     runMenu(settingsMenuOptions, 0);  // Return to settings menu
 }
 
