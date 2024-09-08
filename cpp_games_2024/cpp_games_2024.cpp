@@ -29,26 +29,17 @@ void hello_world()
 
 void run_sudoku_menu() {
     SudokuClient sudokuClient;
+    // Define the menu options with their descriptions and associated actions
+    map<int, MenuOption<void>> menuOptions = {
+        {1, {"Play", [&]() { sudokuClient.play_sudoku(); }}},
+        {2, {"Settings", [&]() { sudokuClient.settings_sudoku(); }}},
+        {0, {"Quit", [&]() { sudokuClient.quit_sudoku(); }}}
+    };
 
-    if (sudokuClient.loadLibrary()) {
-        Grid grid;
-
-        // Generate a new Sudoku puzzle
-        sudokuClient.generatePuzzle(grid);
-
-        // Remove numbers to create blanks
-        sudokuClient.makePuzzle(grid, 20);
-
-        // Check if a move is valid
-        if (sudokuClient.checkMove(grid, 0, 0, 5)) {
-            PRINT_MESSAGE("Move is valid.");
-        }
-        else {
-            PRINT_MESSAGE("Move is invalid.");
-        }
-
-        sudokuClient.unloadLibrary();
-    }
+    // Run the dynamic menu
+    // Pass the exit option number to runMenu
+    runMenu(menuOptions, 0); // 0 is the exit option number
+    
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

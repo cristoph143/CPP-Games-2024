@@ -42,4 +42,9 @@ public:
     void generatePuzzle(Grid grid);
     bool checkMove(Grid grid, int row, int col, int num);
     void makePuzzle(Grid grid, int blanks);
+
+    void play_sudoku();
+    void settings_sudoku();
+    void quit_sudoku();
 };
+

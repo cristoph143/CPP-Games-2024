@@ -9,6 +9,8 @@ generateSudoku(nullptr),
 isValidMove(nullptr),
 removeNumbers(nullptr) {}
 
+SudokuClient sudokuClient;
+
 // Destructor: Unload the library if it's loaded
 SudokuClient::~SudokuClient() {
     unloadLibrary();
@@ -75,4 +77,37 @@ void SudokuClient::makePuzzle(Grid grid, int blanks) {
     if (removeNumbers) {
         removeNumbers(grid, blanks);
     }
+}
+
+// Define functions for Sudoku actions
+void SudokuClient::play_sudoku() {
+    if (sudokuClient.loadLibrary()) {
+        Grid grid;
+
+        // Generate a new Sudoku puzzle
+        sudokuClient.generatePuzzle(grid);
+
+        // Remove numbers to create blanks
+        sudokuClient.makePuzzle(grid, 20);
+
+        // Check if a move is valid
+        if (sudokuClient.checkMove(grid, 0, 0, 5)) {
+            PRINT_MESSAGE("Move is valid.");
+        }
+        else {
+            PRINT_MESSAGE("Move is invalid.");
+        }
+
+        sudokuClient.unloadLibrary();
+    }
+}
+
+void SudokuClient::settings_sudoku() {
+    cout << "Sudoku Settings..." << endl;
+    // Add functionality for Sudoku settings
+}
+
+void SudokuClient::quit_sudoku() {
+    cout << "Quitting Sudoku Menu..." << endl;
+    // Add functionality to handle quitting the Sudoku submenu
 }
