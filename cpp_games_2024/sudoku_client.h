@@ -1,6 +1,8 @@
 #pragma once
 #include "CommonTool.h"
-#include "../sudoku_library/sudoku_library.h"
+//#include "../sudoku_library/sudoku_library.h"
+#include <string>
+
 
 typedef int Grid[9][9];
 
@@ -22,6 +24,15 @@ typedef void (*RemoveNumbersFunc)(Grid grid, int blanks);
 typedef void* (*CreateLibraryInstanceFunc)();
 typedef void (*DestroyLibraryInstanceFunc)(void* instance);
 
+struct SudokuSettings {
+    string sudokuType;
+    bool timerEnabled;
+    string difficulty;
+};
+
+extern SudokuSettings settings;
+
+
 // Class to manage loading and using the Sudoku library
 class SudokuClient {
 private:
@@ -36,6 +47,22 @@ public:
     SudokuClient();
     ~SudokuClient();
 
+    static SudokuClient& getInstance() {
+        static SudokuClient instance; // Guaranteed to be destroyed and instantiated on first use.
+        return instance;
+    }
+
+    // Accessor methods
+    string getSudokuType() const { return settings.sudokuType; }
+    void setSudokuType(const string& type) { settings.sudokuType = type; }
+
+    bool isTimerEnabled() const { return settings.timerEnabled; }
+    void setTimerEnabled(bool enabled) { settings.timerEnabled = enabled; }
+
+    string getDifficulty() const { return settings.difficulty; }
+    void setDifficulty(const string& level) { settings.difficulty = level; }
+
+
     bool loadLibrary();
     void unloadLibrary();
 
@@ -46,5 +73,20 @@ public:
     void play_sudoku();
     void settings_sudoku();
     void quit_sudoku();
+
+    void select_sudoku_type();
+    void select_timer();
+    void select_difficulty();
+
+    // Show Sudoku types menu
+    void showSudokuTypes();
+    void showTimerOptions();
+    void showDifficultyOptions();
+
+    void enable_timer();
+    void disable_timer();
+    void set_difficulty(const string& difficulty);
 };
+
+
 

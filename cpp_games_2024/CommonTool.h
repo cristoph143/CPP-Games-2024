@@ -25,6 +25,8 @@ struct MenuOption {
     MenuAction<Ret, Args...> action;
 };
 
+
+
 template<typename T>
 T loadFunction(HMODULE hLib, const char* functionName) {
     // Get the address of the function
