@@ -4,12 +4,14 @@
 #include <iostream>
 #include "cpp_games_2024.h"
 #include "CommonTool.h"
+#include "sudoku_client.h"
 
 int main()
 {
     // Define the menu options with their descriptions and associated actions
     map<int, MenuOption> menuOptions = {
-        {1, {"Hello World", hello_world}},
+        {1, {"Sudoku", run_sudoku_menu}},
+        {2, {"Hello World", hello_world}},
         {0, {"Exit", exitApp}}
     };
     // Run the dynamic menu
@@ -22,6 +24,10 @@ int main()
 void hello_world()
 {
     PRINT_MESSAGE("Hello, World!");
+}
+
+void run_sudoku_menu() {
+    runSudokuGame();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -1,6 +1,21 @@
 #include "CommonTool.h"
 #include <iostream>
 
+HMODULE loadDLL(const std::wstring& dllPath) {
+    HMODULE hLib = LoadLibrary(dllPath.c_str());
+    if (hLib == NULL) {
+        std::wcerr << L"Failed to load " << dllPath << std::endl;
+    }
+    return hLib;
+}
+
+// Function to unload the DLL
+void unloadDLL(HMODULE hLib) {
+    if (hLib != NULL) {
+        FreeLibrary(hLib);
+    }
+}
+
 
 // Function to display menu and handle user choices
 void runMenu(const std::map<int, MenuOption>& menuOptions, int exitOption) {
