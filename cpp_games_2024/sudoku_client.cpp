@@ -35,93 +35,29 @@ map<int, MenuOption<>> settingsMenuOptions = {
     {0, {"Back to Main Menu", [&]() { runMenu(mainMenuOptions, 0); }}}
 };
 
-// Define the menu options for Sudoku types with lambda functions
-map<int, MenuOption<>> sudokuTypeMenuOptions = 
-{
-    {1, {"Classic Sudoku", [&]() { 
-        settings.sudokuType = "Classic"; 
-        PRINT_MESSAGE("Set Sudoku Type to Classic"); 
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {2, {"Mini Sudoku", [&]() { 
-        settings.sudokuType = "Mini"; 
-        PRINT_MESSAGE("Set Sudoku Type to Mini");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {3, {"Samurai Sudoku", [&]() { 
-        settings.sudokuType = "Samurai"; 
-        PRINT_MESSAGE("Set Sudoku Type to Samurai");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {4, {"Hyper Sudoku", [&]() { 
-        settings.sudokuType = "Hyper"; 
-        PRINT_MESSAGE("Set Sudoku Type to Hyper");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {5, {"Killer Sudoku", [&]() { 
-        settings.sudokuType = "Killer"; 
-        PRINT_MESSAGE("Set Sudoku Type to Killer");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {6, {"Jigsaw Sudoku", [&]() { 
-        settings.sudokuType = "Jigsaw"; 
-        PRINT_MESSAGE("Set Sudoku Type to Jigsaw");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {7, {"Word Sudoku", [&]() { 
-        settings.sudokuType = "Word"; 
-        PRINT_MESSAGE("Set Sudoku Type to Word");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {8, {"Diagonal Sudoku", [&]() { 
-        settings.sudokuType = "Diagonal"; 
-        PRINT_MESSAGE("Set Sudoku Type to Diagonal");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {9, {"Sudoku X", [&]() { 
-        settings.sudokuType = "Sudoku X"; 
-        PRINT_MESSAGE("Set Sudoku Type to Sudoku X");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {10, {"Sudoku with Constraints", [&]() { 
-        settings.sudokuType = "Constraints"; 
-        PRINT_MESSAGE("Set Sudoku Type to Constraints");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {11, {"Multi-Sudoku", [&]() { 
-        settings.sudokuType = "Multi"; 
-        PRINT_MESSAGE("Set Sudoku Type to Multi");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {12, {"Sudoku with Symmetry", [&]() { 
-        settings.sudokuType = "Symmetry"; 
-        PRINT_MESSAGE("Set Sudoku Type to Symmetry");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {0, {"Back to Settings Menu", [&]() { 
-        runMenu(settingsMenuOptions, 0); 
-    }}}
+// Define the menu options for Sudoku types using the helper function
+map<int, MenuOption<>> sudokuTypeMenuOptions = {
+    {1, {"Classic Sudoku", [&]() { sudokuClient.setSudokuType("Classic"); }}},
+    {2, {"Mini Sudoku", [&]() { sudokuClient.setSudokuType("Mini"); }}},
+    {3, {"Samurai Sudoku", [&]() { sudokuClient.setSudokuType("Samurai"); }}},
+    {4, {"Hyper Sudoku", [&]() { sudokuClient.setSudokuType("Hyper"); }}},
+    {5, {"Killer Sudoku", [&]() { sudokuClient.setSudokuType("Killer"); }}},
+    {6, {"Jigsaw Sudoku", [&]() { sudokuClient.setSudokuType("Jigsaw"); }}},
+    {7, {"Word Sudoku", [&]() { sudokuClient.setSudokuType("Word"); }}},
+    {8, {"Diagonal Sudoku", [&]() { sudokuClient.setSudokuType("Diagonal"); }}},
+    {9, {"Sudoku X", [&]() { sudokuClient.setSudokuType("Sudoku X"); }}},
+    {10, {"Sudoku with Constraints", [&]() { sudokuClient.setSudokuType("Constraints"); }}},
+    {11, {"Multi-Sudoku", [&]() { sudokuClient.setSudokuType("Multi"); }}},
+    {12, {"Sudoku with Symmetry", [&]() { sudokuClient.setSudokuType("Symmetry"); }}},
+    {0, {"Back to Settings Menu", [&]() { runMenu(settingsMenuOptions, 0); }}}
 };
-// Define the menu options for difficulty settings with lambda functions
+
+// Define the menu options for difficulty using the helper function
 map<int, MenuOption<>> difficultyMenuOptions = {
-    {1, {"Easy", [&]() { 
-        settings.difficulty = "Easy"; 
-        PRINT_MESSAGE("Difficulty set to Easy");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {2, {"Normal", [&]() { 
-        settings.difficulty = "Normal"; 
-        PRINT_MESSAGE("Difficulty set to Normal"); 
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {3, {"Hard", [&]() { 
-        settings.difficulty = "Hard"; 
-        PRINT_MESSAGE("Difficulty set to Hard");
-        runMenu(settingsMenuOptions, 0);  // Return to settings menu
-    }}},
-    {0, {"Back to Settings Menu", [&]() { 
-        runMenu(settingsMenuOptions, 0); 
-    }}}
+    {1, {"Easy", [&]() { sudokuClient.setDifficulty("Easy"); }}},
+    {2, {"Normal", [&]() { sudokuClient.setDifficulty("Normal"); }}},
+    {3, {"Hard", [&]() { sudokuClient.setDifficulty("Hard"); }}},
+    {0, {"Back to Settings Menu", [&]() { runMenu(settingsMenuOptions, 0); }}}
 };
 // Define the menu options for timer settings with lambda functions
 map<int, MenuOption<>> timerMenuOptions = {
@@ -139,6 +75,21 @@ map<int, MenuOption<>> timerMenuOptions = {
         runMenu(sudokuTypeMenuOptions, 0); 
     }}}
 };
+
+// Helper function for setting Sudoku type
+void SudokuClient::setSudokuType(const string& type) {
+    settings.sudokuType = type;
+    PRINT_MESSAGE("Set Sudoku Type to %s", type.c_str());
+    runMenu(settingsMenuOptions, 0);  // Return to settings menu
+}
+
+// Helper function for setting difficulty
+void SudokuClient::setDifficulty(const string& difficulty) {
+    settings.difficulty = difficulty;
+    PRINT_MESSAGE("Difficulty set to %s", difficulty.c_str());
+    runMenu(settingsMenuOptions, 0);  // Return to settings menu
+}
+
 // Destructor: Unload the library if it's loaded
 SudokuClient::~SudokuClient() {
     unloadLibrary();

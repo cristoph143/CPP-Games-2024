@@ -1,19 +1,9 @@
 #pragma once
 #include "CommonTool.h"
-//#include "../sudoku_library/sudoku_library.h"
 #include <string>
 
 
 typedef int Grid[9][9];
-
-//typedef Csudokulibrary* (*CreateLibraryInstance)();
-//typedef void (*GenerateSudokuFunc)(int[9][9]);
-//typedef bool (*IsValidMoveFunc)(int[9][9], int, int, int);
-//typedef void (*RemoveNumbersFunc)(int[9][9], int);
-
-
-// Function to run the Sudoku game
-//int runSudokuGame();
 
 // Define function pointer types for Sudoku operations
 typedef void (*GenerateSudokuFunc)(Grid grid);
@@ -54,14 +44,14 @@ public:
 
     // Accessor methods
     string getSudokuType() const { return settings.sudokuType; }
-    void setSudokuType(const string& type) { settings.sudokuType = type; }
 
     bool isTimerEnabled() const { return settings.timerEnabled; }
     void setTimerEnabled(bool enabled) { settings.timerEnabled = enabled; }
 
     string getDifficulty() const { return settings.difficulty; }
-    void setDifficulty(const string& level) { settings.difficulty = level; }
 
+    void setSudokuType(const string& type);
+    void setDifficulty(const string& difficulty);
 
     bool loadLibrary();
     void unloadLibrary();
